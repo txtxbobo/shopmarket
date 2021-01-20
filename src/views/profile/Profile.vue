@@ -1,13 +1,68 @@
 <template>
-  <h2>用户</h2>
+  <div>
+    <scroll class="content">
+      <ul>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+        <li>你好呀</li>
+      </ul>
+    </scroll>
+  </div>
 </template>
 
 <script>
-export default {
-  name: "Profile"
-}
+  import Scroll from 'components/common/scroll/Scroll'
+  export default {
+    name: "Profile",
+    components: {
+      Scroll
+    }
+  }
 </script>
 
 <style scoped>
-
+  .content {
+    height: 300px;
+    background-color: red;
+    overflow: hidden;
+  }
 </style>

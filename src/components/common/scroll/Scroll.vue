@@ -1,0 +1,84 @@
+<template>
+  <div class="wrapper" ref="wrapper">
+    <div class="content">
+      <slot></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+import BScroll from '@better-scroll/core'
+import Pullup from '@better-scroll/pull-up'
+BScroll.use(Pullup)
+export default {
+  name: 'Scroll',
+  props: {
+    probeType: {
+      type: Number,
+      default: 0
+    },
+    pullUpLoad: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+     return {
+       scroll: null
+     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        click: true,
+        observeDOM:true,
+        // 0和1都是补侦测
+        // probeTyep: 3,
+        probeType: this.probeType,
+        pullUpLoad: this.pullUpLoad
+      })
+      // 2.监听滚动的位置
+      if (this.probeType === 2 || this.probeType === 3) {
+        this.scroll.on('scroll', (position) => {
+          // console.log(position);
+          this.$emit('scroll', position)
+        })
+      }
+      console.log(this.scroll)
+      // 3.监听滚动到底部
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
+          // console.log('滚到底部');
+          this.$emit('pullingUp')
+        })
+      }
+    })
+  },
+  methods: {
+    scrollTo(x, y, time = 500) {
+      this.scroll && this.scroll.scrollTo(x, y, time)
+    },
+    finishPullUp() {
+      this.scroll && this.scroll.finishPullUp()
+    },
+    refresh() {
+      // console.log('----');
+      this.scroll && this.scroll.refresh()
+    },
+    finishPullUp() {
+      this.scroll && this.scroll.finishPullUp()
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0
+    }
+  },
+  updated() {
+    this.scroll.refresh()
+  },
+  components: {}
+}
+</script>
+
+<style scoped>
+
+</style>

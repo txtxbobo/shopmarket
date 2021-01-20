@@ -5,6 +5,9 @@ import store from './store'
 // import './registerServiceWorker'
 
 Vue.config.productionTip = false
+// 事件总线   bus 将GoodsListItem.vue中的事件传入到Home.vue中
+
+Vue.prototype.$bus = new Vue()
 
 new Vue({
   router,
