@@ -1,6 +1,6 @@
 <template>
   <div class="detail-info" v-if="Object.keys(detailInfo).length !== 0">
-    <div class="info-desc">
+    <div class="info-desc clear-fix">
       <div class="start"></div>
       <div class="center">{{ detailInfo.desc }}</div>
       <div class="end"></div>

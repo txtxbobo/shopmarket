@@ -30,12 +30,25 @@ export default {
   },
   methods: {
     imageLoad() {
-      // console.log('imageLoad');
       this.$bus.$emit('itemImageLoad')
+      // console.log('imageLoad');
+      // if (this.$route.path.indexOf('/home') != -1) {
+      //   this.$bus.$emit('homeItemImageLoad')
+      // } else if(this.$route.path.indexOf('/detail') != -1) {
+      //   this.$bus.$emit('detailItemImageLoad')
+      // }
     },
     itemClick() {
       // console.log('跳转到详情页');
+      // 1.动态路由
       this.$router.push('/detail/' + this.goodsItem.iid)
+      // 2.query  方式
+      // this.$router.push({
+      //   path: '/detail',
+      //   query: {
+      //     iid: this.goodsItem.iid
+      //   }
+      // })
     }
   },
   components: {}

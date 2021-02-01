@@ -44,6 +44,7 @@ const routes = [
     }
   },
   {
+    // 动态路由
     path: '/detail/:iid',
     component: Detail
   }

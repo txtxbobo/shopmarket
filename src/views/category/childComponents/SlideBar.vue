@@ -1,6 +1,6 @@
 <template>
   <div class="category-slide">
-    <scroll class="slide-bar-scroll" ref="scroll" @mousemove="load">
+    <scroll class="slide-bar-scroll" ref="scroll">
       <ul>
         <li class="datalist" v-for="(item,index) in dataList.list" :key="index"
           :class="{active:index === currentIndex}"
@@ -39,12 +39,13 @@ export default {
       }
       this.$emit('slideBarClick', obj)
     },
-    load() {
-      if (++currentIndex == this.dataList.list.length) {
-        // console.log(scroll);
-        this.$refs.scroll.refresh()
-      }
-    }
+    // load() {
+    //   if (++currentIndex == this.dataList.list.length) {
+    //     // console.log(scroll);
+    //     // this.$refs.scroll.refresh()
+    //     console.log(refresh);
+    //   }
+    // }
   },
   components: {Scroll}
 }
@@ -67,7 +68,7 @@ export default {
     /* background-color: aqua; */
   }
   .datalist {
-    height: 50px;
+    /* height: 50px; */
     line-height: 50px;
     text-align: center;
   }

@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar></detail-nav-bar>
-    <scroll class="content" ref="scroll" :probe-type="2">
+    <detail-nav-bar @titleClick='titleClick' ref="tabControl"></detail-nav-bar>
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
       <detail-swiper :topImages="topImages"></detail-swiper>
-      <detail-base-info :goods="goods" class="base-info"></detail-base-info>
-      <detail-shop-info :shop-info="shopInfo" class="shop-info" />
-      <detail-goods-info :detail-info="detailInfo" @imgLoaded="imageLoad"></detail-goods-info>
-      <detail-param-info :params-info="paramsInfo"/>
-      <detail-commont-info :commont-info="commontInfo" class="commont-info" ref="commontInfo"/>
-      <goods-list :goods="recommendInfo" :is-recommend="true" ref="recommendInfo" class="recommend-goods"/>
+      <detail-base-info :goods="goods" class="detail-base"></detail-base-info>
+      <detail-shop-info :shop-info="shopInfo" class="detail-shop" />
+      <detail-goods-info :detail-info="detailInfo" @imgLoaded="imageLoad" class="detail-goods"></detail-goods-info>
+      <detail-param-info :params-info="paramsInfo" class="detail-params" ref="paramInfo"/>
+      <detail-commont-info :commont-info="commontInfo" class="detail-commont" ref="commontInfo"/>
+      <goods-list :goods="recommendInfo" :is-recommend="true" ref="recommendInfo" class="detail-recommend"/>
     </scroll>
   </div>
 </template>
@@ -26,6 +26,8 @@ import DetailCommontInfo from './childComps/DetailCommontInfo.vue';
 // 网络请求
 import { getDetail, Goods, Shop, GoodsParam, getRecommendData } from "../../network/detail";
 import GoodsList from '../../components/content/goods/GoodsList.vue';
+// 导入混入
+import {imgListenerMixin} from '../../common/mixin'
 
 export default {
   name: "Detail",
@@ -38,17 +40,24 @@ export default {
       detailInfo: {},
       paramsInfo: {},
       commontInfo: {},
-      recommendInfo: []
+      recommendInfo: [],
+      topY: [0, 0, 0, 0, Number.MAX_VALUE],
+      currentIndex: 0
     };
   },
+  mixins: [imgListenerMixin],
   created() {
+    // 请求详情数据
     // 1.保存传入的iid
     this.iid = this.$route.params.iid;
+    // 2.query方式保存iid
+    // this.iid = this.$route.query.iid;
     // 2.根据iid请求详情数据
     getDetail(this.iid).then(res => {
-      console.log(res);
+      // console.log(res);
       // 1.获取顶部轮播图片
       const data = res.result;
+      // 取出轮播图的数据
       this.topImages = data.itemInfo.topImages;
 
       // 2.获取商品信息
@@ -69,11 +78,11 @@ export default {
       if (data.rate.cRate !== 0) {
         this.commontInfo = data.rate.list[0]
       }
-      getRecommendData().then(res => {
-        console.log(res);
-        this.recommendInfo = res.data.list
-      })
-    });
+    }),
+    getRecommendData().then(res => {
+      // console.log(res);
+      this.recommendInfo = res.data.list
+    })
   },
   updated() {
 
@@ -82,7 +91,32 @@ export default {
   methods: {
     imageLoad() {
       this.$refs.scroll.refresh();
+      // 组件对象必须使用$el来获取
+      this.topY[1] = this.$refs.paramInfo.$el.offsetTop
+      this.topY[2] = this.$refs.commontInfo.$el.offsetTop
+      this.topY[3] = this.$refs.recommendInfo.$el.offsetTop
+      // console.log(this.topY);
     },
+    titleClick(index) {
+      // console.log(index);
+      this.$refs.scroll.scrollTo(0, -this.topY[index], 500)
+    },
+    contentScroll(position) {
+      // console.log(position);
+      // 1.获取Y值
+      const positionY = -position.y
+      // 2.和主题中的值进行对比
+      //  [0, 6461, 7351, 7667]  在0 ~ 6461之间是商品  。。。。
+      this.topY.forEach((item, index) => {
+        if (positionY >= item && positionY < this.topY[index + 1] && this.currentIndex !== index) {
+          this.currentIndex = index
+          this.$refs.tabControl.currentIndex = this.currentIndex
+        }
+      });
+    }
+  },
+  destroyed() {
+    this.$bus.$off('itemImageLoad', this.imgLoadListener)
   },
   components: {
     DetailNavBar,
@@ -113,6 +147,9 @@ export default {
     bottom: 50px;
     left: 0;
     right: 0;
+  }
+  .detail-shop, .detail-base, .detail-params, .detail-recommend, .detail-commont, .detail-goods {
+    box-shadow: 0px 5px 1px rgba(100, 100, 100, .1);
   }
   .recommend-goods {
     padding-top: 5px;  }

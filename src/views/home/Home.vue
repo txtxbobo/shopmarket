@@ -50,6 +50,8 @@ import { getHomeMultidata, getHomeGoods } from "network/home";
 
 // 导入utils
 import { debounce } from "common/utils";
+// 导入混入
+import {imgListenerMixin} from 'common/mixin'
 
 // 导入better-scroll
 // import BSscroll from '@better-scroll/core'
@@ -89,20 +91,26 @@ export default {
       saveY: 0
     };
   },
+  mixins: [imgListenerMixin],
   computed: {
     showGoods() {
       return this.goods[this.currentType].list;
     }
   },
-  // 离开 
+  // 进来
   activated() {
     // scrollTo(x , y, time)
-    this.$refs.scroll.scrollTo(0, this.saveY, 0)
     this.$refs.scroll.refresh()
+    this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    // console.log('进来');
   },
-  // 进来
+  // 离开
   deactivated() {
+    // 记录Y值
     this.saveY = this.$refs.scroll.getScrollY()
+    // console.log(this.saveY);
+    // 取消全局事件的监听
+    this.$bus.$off('itemImageLoad', this.imgLoadListener)
   },
   // createde里面一般不写具体的方法逻辑  写在methods
   created() {
@@ -117,13 +125,13 @@ export default {
   mounted() {
     // 1.图片加载完成后的事件监听
     // 防抖动封装
-    const refresh = debounce(this.$refs.scroll.refresh, 200);
-    // 3.监听item中图片加载完成
-    this.$bus.$on("itemImageLoad", () => {
-      // $refs.scroll在mouted里面监听
-      // this.$refs.scroll.refresh()
-      refresh();
-    });
+    // let refresh = debounce(this.$refs.scroll.refresh, 200);
+    // // 3.监听item中图片加载完成
+    // this.$bus.$on("itemImageLoad", () => {
+    //   // $refs.scroll在mouted里面监听
+    //   // this.$refs.scroll.refresh()
+    //   refresh();
+    // });  
   },
   // 具体逻辑实现
   methods: {

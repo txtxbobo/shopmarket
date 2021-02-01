@@ -4,7 +4,9 @@
     <div class="goods-price">
       <div class="goods-now-price">{{goods.newPrice}}</div>
       <div class="goods-old-price">{{goods.oldPrice}}</div>
-      <div class="goods-discount" :style="{backgroundColor:goods.discountBgColor,color:'white'}">{{goods.discount}}</div>
+      <div class="goods-discount" :style="{backgroundColor:goods.discountBgColor,color:'white'}">
+        {{goods.discount}}
+      </div>
     </div>
     <div class="info">
       <span>{{goods.columns[0]}}</span>

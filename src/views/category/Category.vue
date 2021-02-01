@@ -22,6 +22,7 @@ import TabControl from '../../components/content/tabControl/TabControl.vue'
 import GoodsList from '../../components/content/goods/GoodsList.vue'
 // 数据请求
 import {getSlideBarData, getMainTopData, getMainMoreData} from '../../network/cstegroy'
+import {imgListenerMixin} from '../../common/mixin' 
 
   export default {
     name: "Category",
@@ -34,8 +35,10 @@ import {getSlideBarData, getMainTopData, getMainMoreData} from '../../network/cs
         goods: []
       }
     },
+    mixins: [imgListenerMixin],
     // 组件创建完后调用created
     created() {
+      // created里面的this就是模块里面的this
       this.getSlideBarData()
     },
     // 创建组件完成后调用
@@ -73,6 +76,10 @@ import {getSlideBarData, getMainTopData, getMainMoreData} from '../../network/cs
           this.goods = [...res]
         })
       }
+    },
+    activated() {
+      this.$refs.scroll.refresh();
+      // console.log(this.$refs.scroll);
     },
   }
 </script>

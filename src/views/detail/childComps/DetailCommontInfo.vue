@@ -47,8 +47,10 @@ export default {
   components: {},
   filters: {
     showDate(value) {
+      // 将时间戳转化为data对象   事件戳是以秒 为单位的，所以要乘以1000
       const date = new Date(value * 1000)
-      return formatDate(date,'yyy-MM-dd hh:mm:ss')
+      // 事件格式化函数
+      return formatDate(date,'yyyy-MM-dd hh:mm:ss')
     }
   }
 }

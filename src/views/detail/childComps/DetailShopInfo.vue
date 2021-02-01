@@ -49,6 +49,7 @@
       }
     },
     filters: {
+      // 过滤器   第一个值或作为参数传入过滤器
       showNum(value) {
         if(value < 10000) return value
         else
