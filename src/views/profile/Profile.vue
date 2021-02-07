@@ -19,8 +19,8 @@ import ProfileList from './childComps/ProfileList.vue'
     components: {
       NavBar,
       LoginState,
-        ProfileList,
-        InfoList
+      ProfileList,
+      InfoList
     }
   }
 </script>
