@@ -1,68 +1,30 @@
 <template>
-  <div>
-    <scroll class="content">
-      <ul>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-        <li>你好呀</li>
-      </ul>
-    </scroll>
+  <div class="profile">
+    <nav-bar class="profile-bav-bar" style="background-color: #ff8189; color: #fff">
+      <p slot="center">品购</p>
+    </nav-bar>
+    <login-state/>
+    <info-list/>
+    <profile-list/>
   </div>
 </template>
 
 <script>
-  import Scroll from 'components/common/scroll/Scroll'
+import NavBar from '../../components/common/navbar/NavBar.vue'
+import InfoList from './childComps/InfoList.vue'
+import LoginState from './childComps/LoginState.vue'
+import ProfileList from './childComps/ProfileList.vue'
   export default {
     name: "Profile",
     components: {
-      Scroll
+      NavBar,
+      LoginState,
+        ProfileList,
+        InfoList
     }
   }
 </script>
 
 <style scoped>
-  .content {
-    height: 300px;
-    background-color: red;
-    overflow: hidden;
-  }
+  
 </style>

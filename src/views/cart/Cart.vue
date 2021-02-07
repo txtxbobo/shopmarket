@@ -83,7 +83,9 @@ export default {
     },
     allSelected() {
       this.cartList.forEach(item => {
-        item.checked = !item.checked
+        if (!item.checked) {
+          item.checked = true
+        }
       })
     },
     commitList() {
