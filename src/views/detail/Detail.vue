@@ -2,6 +2,7 @@
   <div id="detail">
     <detail-nav-bar @titleClick='titleClick' ref="tabControl"></detail-nav-bar>
     <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+      <!-- <div>{{ $store.state.cartList[0] }}</div> -->
       <detail-swiper :topImages="topImages"></detail-swiper>
       <detail-base-info :goods="goods" class="detail-base"></detail-base-info>
       <detail-shop-info :shop-info="shopInfo" class="detail-shop" />
@@ -10,6 +11,8 @@
       <detail-commont-info :commont-info="commontInfo" class="detail-commont" ref="commontInfo"/>
       <goods-list :goods="recommendInfo" :is-recommend="true" ref="recommendInfo" class="detail-recommend"/>
     </scroll>
+    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -22,12 +25,14 @@ import Scroll from "components/common/scroll/Scroll.vue";
 import DetailGoodsInfo from './childComps/DetailGoodsInfo.vue';
 import DetailParamInfo from './childComps/DetailParamInfo.vue';
 import DetailCommontInfo from './childComps/DetailCommontInfo.vue';
+import DetailBottomBar from './childComps/DetailBottomBar'
+import BackTop from '../../components/content/backTop/BackTop'
 
 // 网络请求
-import { getDetail, Goods, Shop, GoodsParam, getRecommendData } from "../../network/detail";
+import { getDetail, Goods, Shop, getRecommendData } from "../../network/detail";
 import GoodsList from '../../components/content/goods/GoodsList.vue';
 // 导入混入
-import {imgListenerMixin} from '../../common/mixin'
+import {backTopMixin, imgListenerMixin} from '../../common/mixin'
 
 export default {
   name: "Detail",
@@ -45,7 +50,7 @@ export default {
       currentIndex: 0
     };
   },
-  mixins: [imgListenerMixin],
+  mixins: [imgListenerMixin, backTopMixin],
   created() {
     // 请求详情数据
     // 1.保存传入的iid
@@ -102,6 +107,8 @@ export default {
       this.$refs.scroll.scrollTo(0, -this.topY[index], 500)
     },
     contentScroll(position) {
+      // 返回顶部
+      this.isShowBackTop = (-position.y) > 1000
       // console.log(position);
       // 1.获取Y值
       const positionY = -position.y
@@ -110,9 +117,26 @@ export default {
       this.topY.forEach((item, index) => {
         if (positionY >= item && positionY < this.topY[index + 1] && this.currentIndex !== index) {
           this.currentIndex = index
+          // 传给navBar中的currentIndex
           this.$refs.tabControl.currentIndex = this.currentIndex
         }
       });
+    },
+    addToCart() {
+      console.log(this.iid);
+      console.log(this.topImages[0]);
+      // 1.获取购物车需要展示的商品信息
+      const product = {
+        // console.log(this.topImages[0])
+        image: this.topImages[0],
+        title: this.goods.title,
+        desc: this.goods.desc,
+        price: this.goods.lowNowPrice,
+        id: this.iid
+      }
+      // 2.将商品添加到购物车里   dispatch分发任务
+      this.$store.dispatch('setCartData', product)
+      // console.log(product);
     }
   },
   destroyed() {
@@ -127,7 +151,9 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommontInfo,
-    GoodsList
+    GoodsList,
+    DetailBottomBar,
+    BackTop
   }
 };
 </script>

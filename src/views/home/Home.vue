@@ -52,6 +52,7 @@ import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debounce } from "common/utils";
 // 导入混入
 import {imgListenerMixin} from 'common/mixin'
+import { backTopMixin } from '../../common/mixin';
 
 // 导入better-scroll
 // import BSscroll from '@better-scroll/core'
@@ -85,13 +86,13 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      isShowBackTop: false,
+      // isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
       saveY: 0
     };
   },
-  mixins: [imgListenerMixin],
+  mixins: [imgListenerMixin, backTopMixin],
   computed: {
     showGoods() {
       return this.goods[this.currentType].list;
@@ -154,11 +155,11 @@ export default {
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
     },
-    backClick() {
-      // console.log("回到顶部");   直接调用组件的方法
-      this.$refs.scroll.scrollTo(0, 0, 500);
-      // console.log("回到顶部");
-    },
+    // backClick() {
+    //   // console.log("回到顶部");   直接调用组件的方法
+    //   this.$refs.scroll.scrollTo(0, 0, 500);
+    //   // console.log("回到顶部");
+    // },
     // 监听位置  显示和隐藏backTop
     contentScroll(position) {
       // 1.判断backTop是否显示
