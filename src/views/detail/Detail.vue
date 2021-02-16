@@ -123,8 +123,8 @@ export default {
       });
     },
     addToCart() {
-      console.log(this.iid);
-      console.log(this.topImages[0]);
+      // console.log(this.iid);
+      // console.log(this.topImages[0]);
       // 1.获取购物车需要展示的商品信息
       const product = {
         // console.log(this.topImages[0])
@@ -136,7 +136,10 @@ export default {
       }
       // 2.将商品添加到购物车里   dispatch分发任务
       this.$store.dispatch('setCartData', product)
-      // console.log(product);
+      // console.log(product);   dispatch返回一个promise
+      // this.$store.dispatch('addCart', product).then(res => {
+      //   console.log(res);
+      // })
     }
   },
   destroyed() {

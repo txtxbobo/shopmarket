@@ -9,15 +9,15 @@
         v-for="(item, index) in cartList"
         :goods-item="item"
         :key="index"
-        @good-selected="goodSelected"
+        @goodSelected="goodSelected"
       >
       </cart-goods-list>
     </scroll>
     <cart-commit
       class="commit"
-      ref="commit"
       :total-price="totalPrice"
       @allSelected="allSelected"
+      ref="commit"
       @commit="commitList"
     ></cart-commit>
   </div>
@@ -33,18 +33,17 @@ import CartCommit from "./childComponents/CartCommit.vue";
 import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
 import { Dialog, Toast } from "vant";
-import Vue from 'vue'
+import Vue from "vue";
 
-Vue.use(Toast)
-Vue.use(Dialog)
-
+Vue.use(Toast);
+Vue.use(Dialog);
 
 export default {
   components: { CartNavBar, Scroll, CartGoodsList, CartCommit },
   CartCommitname: "Cart",
   data() {
     return {
-      price: 0
+      // price: 0
     };
   },
   // mapGetters 辅助函数仅仅是将 store 中的 getter 映射到局部计算属性
@@ -65,13 +64,14 @@ export default {
     deleteAll() {
       localStorage.clear();
       Toast("购物车以清空");
-      this.$refs.commit.checked = false
+      this.$refs.commit.checked = false;
       this.$store.commit("clearCartList");
     },
     goodSelected() {
       let isAllSelectedFlag = 1;
       this.cartList.forEach(item => {
         if (!item.checked) {
+          // console.log(isAllSelectedFlag);
           isAllSelectedFlag = 0;
         }
       });
@@ -83,33 +83,39 @@ export default {
     },
     allSelected() {
       this.cartList.forEach(item => {
-        if (!item.checked) {
-          item.checked = true
-        }
+        item.checked = !item.checked
       })
+      if (this.$refs.commit.checked) {
+        console.log('-----');
+        this.cartList.forEach(item => {
+          item.checked = true
+        })
+      }
     },
     commitList() {
       Dialog.confirm({
-        title:"温馨提示",
-        message:"确定要提交订单吗"
-      }).then(() => {
-        this.$toast({
-          type: "success",
-          message: `支付成功，共计 ${this.totalPrice/100}元`,
-          forbidClick: true,
-          duration: 1500
-        });
-        setTimeout(() => {
-          this.clearCartList()
-          this.$refs.commit.checked = false
-        }, 1500);
-      }).catch(err => err)
+        title: "温馨提示",
+        message: "确定要提交订单吗"
+      })
+        .then(() => {
+          this.$toast({
+            type: "success",
+            message: `支付成功，共计 ${this.totalPrice / 100}元`,
+            forbidClick: true,
+            duration: 1500
+          });
+          setTimeout(() => {
+            this.clearCartList();
+            this.$refs.commit.checked = false;
+          }, 1500);
+        })
+        .catch(err => err);
     }
   },
   created() {
-    let list = JSON.parse(localStorage.getItem("cartGoodsList")) || []
+    let list = JSON.parse(localStorage.getItem("cartGoodsList")) || [];
     if (list) {
-      this.$store.commit("setCartGoodsList", list)
+      this.$store.commit("setCartGoodsList", list);
     }
   },
 
